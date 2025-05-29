@@ -1,73 +1,95 @@
-<p align="center">
-  <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo-small.svg" width="200" alt="Nest Logo" /></a>
-</p>
+🔧 BACKEND (NestJS)
+1. Estrutura da API
+Rotas:
 
-[circleci-image]: https://img.shields.io/circleci/build/github/nestjs/nest/master?token=abc123def456
-[circleci-url]: https://circleci.com/gh/nestjs/nest
+POST /products
 
-  <p align="center">A progressive <a href="http://nodejs.org" target="_blank">Node.js</a> framework for building efficient and scalable server-side applications.</p>
-    <p align="center">
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/v/@nestjs/core.svg" alt="NPM Version" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/l/@nestjs/core.svg" alt="Package License" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/dm/@nestjs/common.svg" alt="NPM Downloads" /></a>
-<a href="https://circleci.com/gh/nestjs/nest" target="_blank"><img src="https://img.shields.io/circleci/build/github/nestjs/nest/master" alt="CircleCI" /></a>
-<a href="https://coveralls.io/github/nestjs/nest?branch=master" target="_blank"><img src="https://coveralls.io/repos/github/nestjs/nest/badge.svg?branch=master#9" alt="Coverage" /></a>
-<a href="https://discord.gg/G7Qnnhy" target="_blank"><img src="https://img.shields.io/badge/discord-online-brightgreen.svg" alt="Discord"/></a>
-<a href="https://opencollective.com/nest#backer" target="_blank"><img src="https://opencollective.com/nest/backers/badge.svg" alt="Backers on Open Collective" /></a>
-<a href="https://opencollective.com/nest#sponsor" target="_blank"><img src="https://opencollective.com/nest/sponsors/badge.svg" alt="Sponsors on Open Collective" /></a>
-  <a href="https://paypal.me/kamilmysliwiec" target="_blank"><img src="https://img.shields.io/badge/Donate-PayPal-ff3f59.svg"/></a>
-    <a href="https://opencollective.com/nest#sponsor"  target="_blank"><img src="https://img.shields.io/badge/Support%20us-Open%20Collective-41B883.svg" alt="Support us"></a>
-  <a href="https://twitter.com/nestframework" target="_blank"><img src="https://img.shields.io/twitter/follow/nestframework.svg?style=social&label=Follow"></a>
-</p>
-  <!--[![Backers on Open Collective](https://opencollective.com/nest/backers/badge.svg)](https://opencollective.com/nest#backer)
-  [![Sponsors on Open Collective](https://opencollective.com/nest/sponsors/badge.svg)](https://opencollective.com/nest#sponsor)-->
+GET /products
 
-## Description
+GET /products/:id
 
-[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
+PUT /products/:id
 
-## Installation
+DELETE /products/:id
 
-```bash
-$ npm install
-```
+2. Entidade Product
+Campos:
 
-## Running the app
+id: number (gerado automaticamente)
 
-```bash
-# development
-$ npm run start
+name: string (obrigatório, não vazio)
 
-# watch mode
-$ npm run start:dev
+price: number (obrigatório, > 0)
 
-# production mode
-$ npm run start:prod
-```
+sku: string (único)
 
-## Test
+Além disso, nos GETs, deve-se retornar:
 
-```bash
-# unit tests
-$ npm run test
+missingLetter: string (primeira letra do alfabeto ausente no nome)
 
-# e2e tests
-$ npm run test:e2e
+3. Banco de Dados
+Use TypeORM ou Prisma com um SQLite ou PostgreSQL simples. Exemplo com TypeORM + SQLite.
 
-# test coverage
-$ npm run test:cov
-```
+4. Validações
+Utilize class-validator para garantir:
 
-## Support
+name não vazio
 
-Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
+price > 0
 
-## Stay in touch
+sku único (checar no service antes de salvar)
 
-- Author - [Kamil Myśliwiec](https://kamilmysliwiec.com)
-- Website - [https://nestjs.com](https://nestjs.com/)
-- Twitter - [@nestframework](https://twitter.com/nestframework)
+5. Função para calcular missingLetter
+ts
+Copiar
+Editar
+function getMissingLetter(name: string): string {
+  const nameLower = name.toLowerCase().replace(/[^a-z]/g, '');
+  const seen = new Set(nameLower.split(''));
+  for (let i = 97; i <= 122; i++) {
+    const letter = String.fromCharCode(i);
+    if (!seen.has(letter)) return letter;
+  }
+  return '_';
+}
+🎨 FRONTEND (React)
+1. Formulário
+Campos:
 
-## License
+Nome
 
-Nest is [MIT licensed](LICENSE).
+Preço
+
+SKU
+
+2. Funcionalidades
+Enviar produto para backend
+
+Buscar lista atualizada e exibir ordenada por nome
+
+Deletar produto
+
+Mostrar missingLetter em cada item da lista
+
+3. Ferramentas sugeridas
+axios ou fetch
+
+useEffect para buscar os produtos
+
+useState para o formulário e a lista
+
+uuid (se mockado)
+
+Estilo com Tailwind, Bootstrap ou puro
+
+🧪 TESTES (opcional, mas valoriza muito!)
+Backend: testes unitários com Jest
+
+Frontend: testes com React Testing Library
+
+✅ JUSTIFICATIVA (sugestão para enviar)
+Optei por usar o NestJS no backend por ser a stack indicada na vaga e por fornecer uma arquitetura escalável, modular e testável. Utilizei o TypeORM com SQLite para facilitar a persistência dos dados localmente e garantir que todas as operações seguissem os requisitos mínimos de validação, como SKU único e preço positivo. A lógica da letra ausente foi encapsulada numa função de utilidade para facilitar testes e reuso.
+
+No frontend, utilizei React para criar uma interface responsiva e simples. Os dados são carregados a partir da API real e o estado local é utilizado para atualização reativa da lista. Optei por manter a aplicação leve, com foco na clareza de lógica e experiência do usuário.
+
+Caso a aplicação fosse escalada, pensaria em adicionar autenticação, paginação na listagem, paginação em backend e testes automatizados no CI/CD.
