@@ -6,12 +6,12 @@ export class ProductModel {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @Column()
+  @Column({ type: 'varchar', length: 255 })
   name: string;
 
-  @Column('float')
+  @Column({ type: 'decimal', precision: 10, scale: 2 })
   price: number;
 
-  @Column()
+  @Column({ type: 'varchar', length: 100 })
   sku: string;
 }

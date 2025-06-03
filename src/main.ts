@@ -1,9 +1,10 @@
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
-import { ValidationPipe } from '@nestjs/common';
+import { ValidationPipe, Logger } from '@nestjs/common';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
+  const logger = new Logger('Bootstrap');
 
   app.enableCors();
 
@@ -15,8 +16,9 @@ async function bootstrap() {
     }),
   );
 
-  const PORT = process.env.PORT || 3000;
+  const PORT = process.env.PORT || 3001;
   await app.listen(PORT);
-  console.log(`Application is running on: http://localhost:${PORT}`);
+
+  logger.log(`Application is running on: http://localhost:${PORT}`);
 }
 bootstrap();
